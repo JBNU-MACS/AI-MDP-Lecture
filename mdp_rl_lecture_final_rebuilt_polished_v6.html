@@ -794,4 +794,62 @@ Until policy_stable is true</pre></div></div><div class="counter">143 / 182</div
 
 <section class="slide" data-slide="180"><div class="topline">인공지능 | MDP와 강화학습</div><h1>DP 알고리즘 요약</h1><div class="layout-single"><ul><li><strong>Value Iteration:</strong> Bellman 수식으로 가치를 수백 번 덮어쓰다 보면 최적 정책이 나옴.</li><li><strong>Policy Iteration:</strong> 평가(Evaluation)와 개선(Improvement)의 두 단계를 오가며 화살표를 능동적으로 돌림.</li></ul></div><div class="counter">180 / 182</div><aside class="notes">요약 3.</aside></section>
 <section class="slide" data-slide="181"><div class="topline">인공지능 | MDP와 강화학습</div><h1>MDP에서 RL로의 확장</h1><div class="layout-single"><ul><li>환경의 룰(T, R)을 모를 때 책상을 박차고 나가 직접 경험하며 배우는 것이 <strong>강화학습(RL)</strong>.</li><li>확률(Sum) 계산을 경험 샘플의 평균으로 흉내 내며, MC와 TD 방식을 사용해 점진적으로 학습한다.</li></ul></div><div class="counter">181 / 182</div><aside class="notes">요약 4.</aside></section>
-<section class="slide" data-slide="182"><div class="topline">인공지능 | MDP와 강화학습</div><h1>Q &amp; A</h1><div class="layout-single" style="text-align:center;"><h2 style="font-size:80px; color:var(--navy); margin-top:100px;">질문 있습니까?</h2><p style="font-size:32px; color:var(--muted); margin-top:40px;">긴 시간 수고 많으셨습니다.</p></div><div class="counter">182 / 182</div><aside class="notes">강의 종료.</aside></section>
+<section class="slide" data-slide="182"><div class="topline">인공지능 | MDP와 강화학습</div><h1>Q &amp; A</h1><div class="layout-single" style="text-align:center;"><h2 style="font-size:80px; color:var(--navy); margin-top:100px;">질문 있습니까?</h2><p style="font-size:32px; color:var(--muted); margin-top:40px;">긴 시간 수고 많으셨습니다.</p></div><div class="counter">182 / 182</div><aside class="notes">강의 종료.</aside></section></main>
+<div id="speaker-overlay"></div>
+<script>
+
+const deck = document.querySelector('.deck');
+const slides = [...document.querySelectorAll('.slide')];
+let index = 0;
+const counter = document.querySelector('.counter');
+
+function setScale() {
+  const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+  deck.style.transform = `scale(${scale})`;
+}
+window.addEventListener('resize', setScale);
+setScale();
+
+function show(i) {
+  index = Math.max(0, Math.min(slides.length - 1, i));
+  slides.forEach((s, n) => {
+    if (n === index) {
+      s.classList.add('active');
+      const c = s.querySelector('.counter');
+      if(c) c.textContent = `${index + 1} / ${slides.length}`;
+    } else {
+      s.classList.remove('active');
+    }
+  });
+  location.hash = `#${index + 1}`;
+  updateNotes();
+}
+
+function updateNotes() {
+  const overlay = document.getElementById('speaker-overlay');
+  if (document.body.classList.contains('show-notes')) {
+    const noteEl = slides[index].querySelector('.notes');
+    const txt = noteEl ? noteEl.innerHTML : "이 슬라이드에는 작성된 발표자 노트가 없습니다.";
+    overlay.innerHTML = `<strong style="color:#F1C40F;">[Slide ${index+1}] 발표자 노트</strong><br><br>${txt}`;
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); show(index + 1); }
+  if (['ArrowLeft', 'PageUp', 'Backspace'].includes(e.key)) { e.preventDefault(); show(index - 1); }
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+  if (e.key === 'n' || e.key === 'N') { document.body.classList.toggle('show-notes'); updateNotes(); }
+});
+
+window.addEventListener('hashchange', () => {
+  const n = parseInt(location.hash.replace('#', ''), 10);
+  if (Number.isFinite(n) && n - 1 !== index) show(n - 1);
+});
+
+const start = parseInt(location.hash.replace('#', ''), 10);
+show(Number.isFinite(start) ? start - 1 : 0);
+
+</script>
+</body>
+</html>
